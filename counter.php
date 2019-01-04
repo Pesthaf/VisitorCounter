@@ -6,11 +6,11 @@ define('DB_TABLENAME', 'visitors');
 define('DEBUG', false);
 
 // Подключаем БД
-$db_path = dirname(__FILE__) . '/' . DB_FILENAME;
-if (!file_exists($db_path)) {
+$dbPath = dirname(__FILE__) . '/' . DB_FILENAME;
+if (!file_exists($dbPath)) {
 	if (DEBUG) echo "Пытаемся создать БД" . PHP_EOL;
 	try {
-		$db = new SQLite3($db_path);
+		$db = new SQLite3($dbPath);
 	} catch (Exception $e) {
 		if (DEBUG) echo "Ошибка создания БД, проверьте права доступа в папке и наличие модуля PHP-SQLite3 (Исключение: " . $e->getMessage() . ")" . PHP_EOL;
 		exit;
@@ -26,7 +26,7 @@ if (!file_exists($db_path)) {
 		if (DEBUG) echo "Ошибка создания таблицы, прерываем работу скрипта" . PHP_EOL;
 		exit;
 	}
-} else $db = new SQLite3($db_path);
+} else $db = new SQLite3($dbPath);
 
 // Получаем данные клиента
 $url = $_SERVER['REQUEST_URI'];
