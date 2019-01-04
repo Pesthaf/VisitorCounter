@@ -3,6 +3,7 @@
 // Определяем константы
 define('DB_FILENAME', 'counter.db');
 define('DB_TABLENAME', 'visitors');
+define('RETURN_VISITORS_OF_TODAY', true);
 define('DEBUG', false);
 
 // Подключаем БД
@@ -43,6 +44,13 @@ $result = $db->exec($request);
 if (DEBUG) if ($result) echo "Посетитель успешно занесен в БД.";
 else echo "Ошибка выполнения запроса INSERT в БД.";
 
+// Возвращаем количество посетителей за день, если включено
+if (RETURN_VISITORS_OF_TODAY) {
+	$request = "SELECT COUNT(*) FROM `" . DB_TABLENAME . "` WHERE `date` > strftime('%s', 'now', '-1 days');";
+	$visitorsToday = $db->querySingle($request);
+	// -- и выводим их сразу в stdout
+	if ($visitorsToday) echo $visitorsToday;
+}
 // Закрываем БД
 $db->close();
 
