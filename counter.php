@@ -26,7 +26,7 @@ if (!file_exists($db_path)) {
 		if (DEBUG) echo "Ошибка создания таблицы, прерываем работу скрипта" . PHP_EOL;
 		exit;
 	}
-} else $db = new SQLite3(DB_FILENAME);
+} else $db = new SQLite3($db_path);
 
 // Получаем данные клиента
 $url = $_SERVER['REQUEST_URI'];
