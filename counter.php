@@ -33,20 +33,19 @@ if (!file_exists($dbPath)) {
 $url = $_SERVER['REQUEST_URI'];
 $ip = getRealIpAddr();
 $useragent = $_SERVER['HTTP_USER_AGENT'];
-$date = time();
-if (DEBUG) echo "Данные о клиенте: $url, $ip, $useragent, $date" . PHP_EOL;
+if (DEBUG) echo "Данные о клиенте: $url, $ip, $useragent" . PHP_EOL;
 
 // Записываем в БД
 $request = "INSERT INTO `" . DB_TABLENAME . "` (
 	`url`, `ip`, `useragent`, `date`)
-	VALUES ('$url', '$ip', '$useragent', '$date');";
+	VALUES ('$url', '$ip', '$useragent', DATETIME('now', 'localtime'));";
 $result = $db->exec($request);
 if (DEBUG) if ($result) echo "Посетитель успешно занесен в БД.";
 else echo "Ошибка выполнения запроса INSERT в БД.";
 
 // Возвращаем количество посетителей за день, если включено
 if (RETURN_VISITORS_OF_TODAY) {
-	$request = "SELECT COUNT(*) FROM `" . DB_TABLENAME . "` WHERE `date` > strftime('%s', 'now', '-1 days');";
+	$request = "SELECT COUNT(*) FROM `" . DB_TABLENAME . "` WHERE date(`date`) = date('now');";
 	$visitorsToday = $db->querySingle($request);
 	// -- и выводим их сразу в stdout
 	if ($visitorsToday) echo $visitorsToday;
