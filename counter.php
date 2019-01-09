@@ -21,6 +21,7 @@ if (!file_exists($dbPath)) {
 		url TEXT,
 		ip TEXT,
 		useragent TEXT,
+		referer TEXT,
 		date INTEGER);';
 	$result = $db->exec($request);
 	if (!$result) {
@@ -33,12 +34,13 @@ if (!file_exists($dbPath)) {
 $url = $_SERVER['REQUEST_URI'];
 $ip = getRealIpAddr();
 $useragent = $_SERVER['HTTP_USER_AGENT'];
-if (DEBUG) echo "Данные о клиенте: $url, $ip, $useragent" . PHP_EOL;
+$referer = $_SERVER['HTTP_REFERER'];
+if (DEBUG) echo "Данные о клиенте: $url, $ip, $useragent, $referer" . PHP_EOL;
 
 // Записываем в БД
 $request = "INSERT INTO `" . DB_TABLENAME . "` (
-	`url`, `ip`, `useragent`, `date`)
-	VALUES ('$url', '$ip', '$useragent', DATETIME('now', 'localtime'));";
+	`url`, `ip`, `useragent`, `referer`, `date`)
+	VALUES ('$url', '$ip', '$useragent', '$referer', DATETIME('now', 'localtime'));";
 $result = $db->exec($request);
 if (DEBUG) if ($result) echo "Посетитель успешно занесен в БД.";
 else echo "Ошибка выполнения запроса INSERT в БД.";
